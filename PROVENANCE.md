@@ -1,21 +1,19 @@
-# Music and assets
+# Music and materials
 
-All nine sixteen-position miniatures were composed specifically for Petal. They do not adapt a pre-existing score, recording, soundfont or sample. Every note is synthesized locally from three decaying sine partials. A compressor and soft limiter bound the output.
+Petal synthesizes every note locally. It contains no recordings, purchased samples, reference photographs, remote media, AI service or runtime API. Its geometry, procedural material maps and arrangements are made for this instrument. Three.js and RoomEnvironment are bundled under the included MIT license.
 
-| Tune | Tempo |
-|---|---|
-| Apricot morning | 92 BPM |
-| Paper sailboats | 105 BPM |
-| The little orchard | 100 BPM |
-| Velvet rain | 78 BPM |
-| Sunday bicycle | 116 BPM |
-| Moon in a teacup | 76 BPM |
-| Wildflower lane | 108 BPM |
-| The amber hour | 84 BPM |
-| After the fair | 90 BPM |
+The nine melodies below are public-domain compositions. These are newly entered, reduced music-box settings of complete song verses/themes or a named classical passage, not reproductions of modern recordings or modern protected arrangements. Pitch transposition, spacing, pauses at the loop seam and soft tine synthesis are our own. The arrangement data and original synthesis code are dedicated under CC0 1.0. No source scans, MIDI performances or Library reference files are bundled.
 
-The included note arrangements and default composition are dedicated to the public domain under CC0 1.0 to the extent possible. This records their authorship and source history; it is not a claim that software can prove the universal absence of coincidental melodic similarity.
+| Tune | Composition and source checked | Setting |
+|---|---|---|
+| Ode to Joy | Beethoven (1770–1827), Symphony No.9 theme,1824. [Mutopia528](https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=528), typesetter explicitly Public Domain. |16-bar melody in C; dotted cadence and contrasting middle phrase. |
+| Für Elise | Beethoven, WoO59,1810; [Mutopia931](https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=931), Breitkopf & Härtel1888, explicitly Public Domain. | Reduced opening A theme, contrasting ascent and A return; preserves D♯/G♯ and sixteenth-note movement. This is an excerpt, not the whole bagatelle. |
+| Brahms’ Lullaby | Brahms (1833–1897), Op.49 No.4,1868. [Mutopia1037](https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=1037), Indiana University score source, explicitly Public Domain. | One complete vocal verse, transposed from E♭ to C; rests and dotted notes retained. |
+| Greensleeves | Traditional16th-century English melody. [Mutopia1247](https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=1247), explicit Public Domain soprano/ABC notation. | Verse and refrain in A minor; both natural and raised sixths and the raised leading tone retained. |
+| Amazing Grace | Traditional New Britain melody paired with Newton’s text in William Walker’s Southern Harmony1835. [Library of Congress timeline](https://www.loc.gov/collections/amazing-grace/articles-and-essays/timeline/) and [historical tune135](https://www.gutenberg.org/cache/epub/59884/pg59884-images.html). | One complete verse, pickup, dotted figures, pauses and tonic cadence. No lyrics or later additions. |
+| Auld Lang Syne | Traditional Scottish melody. [Library of Congress1868 score](https://www.loc.gov/resource/music.musihas-100000420/) and [Gutenberg source list identifying the1868 Baumbach score](https://www.gutenberg.org/files/21566/21566-h/21566-h.htm). | Verse and chorus in C; dotted rhythm and pickup retained. Only traditional tune used. |
+| Twinkle, Twinkle | Traditional Ah! vous dirai-je, maman, documented by Mozart’s K.265 theme, first published1785. [Historical score catalogue](https://imslp.org/wiki/12_Variations_on_%27Ah,_vous_dirai-je_maman%27,_K.265/300e_(Mozart,_Wolfgang_Amadeus)) and [historical song39](https://www.gutenberg.org/files/42711/42711-h/42711-h.htm). | Complete A–B–A melody; not Mozart’s full variation set. |
+| Frère Jacques | Traditional French round. [Historical Widor collection, pp.18–19](https://www.gutenberg.org/files/42711/42711-h/42711-h.htm); scans supplied by Library of Congress. | One complete round melody in C, with eighth-note bell phrase. No Widor accompaniment copied. |
+| Silent Night | F.X.Gruber (1787–1863),1818. [Mutopia1295](https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=1295), familiar hymn melody, explicitly Public Domain; original1818 melody also checked at [Mutopia81](https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=81). | One familiar full verse in C; slow triple-time setting. |
 
-The gramophone model, procedural wood grain and record texture were authored for this project. No reference photographs or third-party recordings are included.
-
-Three.js and RoomEnvironment are bundled under the MIT license. Their notice and license are preserved in [vendor/THREE-LICENSE.txt](vendor/THREE-LICENSE.txt). Production loads these files locally rather than from a CDN.
+Verification retained locally: source notation for Beethoven/Brahms/Greensleeves/Gruber, primary publication metadata, separate opening-contour fixtures, chromatic-note checks, phrase/cadence and duration checks, rendered audio level/finiteness tests and browser playback tests. Musical taste and iPhone speaker balance still need Dani’s listening feedback; automated checks cannot establish that an arrangement is pleasing.

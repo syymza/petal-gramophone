@@ -1,0 +1,16 @@
+# Local preview verification
+
+This improvement branch has not been pushed, merged or deployed. The live Pages site remains on its previous release.
+
+- Nine familiar melody openings checked against separate pitch fixtures; chromatic accidentals retained. Independent notation review compared the Beethoven, Brahms, Greensleeves and Gruber sources. Settings cover complete song verses/themes or the named Für Elise opening passage, about20–68 seconds at wound speed.
+-465 note/comb contact angles checked across variable cylinder lengths; actual mesh probe distance0.0009918 model units. The sound scheduler and rotor use the same spring-integrated phase, not separate animation timers.
+-142 exact variable-tempo scheduled events checked; slowdown, energy exhaustion, winding, repeated start, fractional pause/resume and stalled-scheduler behavior tested. The final winding slows intervals by over4× before stopping. A stopped spring retains its phase and energy.
+-18 full offline audio renders: all nine arrangements at44.1/48kHz. All finite and audible; maximum peak0.2981, RMS0.0338–0.0661. No recordings or samples used.
+- Chrome phone interaction checks: initial silence, crank gesture, repeated winding, switching all nine while playing, pause/resume, copy/cancel/replace/undo, local reload, direct barrel editing, drag without accidental pins and editing guards.
+-28 layout states: closed/open/barrel/unwrapped at390×844,390×644,375×667,320×568,430×740,844×390 and1200×900. Essential controls remained within the viewport without page scrolling. Pitch banks adapt to available height; grid cells remain44px high.
+- Chrome and WebKit27.2 regression: stopped manual position survives Clear/Undo/Done; exact fractional resume;109-position copied pattern final page remains aligned; empty save, legacy migration, explicit gesture synthesis and mesh contact. WebKit’s runner could not navigate loopback HTTP; the same local source/assets were served via Playwright request interception instead. Chromium used the actual local HTTP preview.
+- Independent code/visual review caught and verified fixes for partial grid pages, pin capacity and front-facing edit phase versus playback phase. Final phone/desktop screenshots were inspected directly. A nine-second MP4 records the actual browser canvas and actual synthesized output, without the surrounding HTML controls.
+
+Limits: no physical iPhone or silent-switch test, no actual changing Safari chrome/safe-area device test, no low-power hardware benchmark, no human listening panel or complete accessibility audit. Automated musical checks establish recognizable source contours, rhythm, range, cadence and signal integrity; Dani’s listening feedback is still needed for taste, balance and comfort.
+
+Local evidence is kept in ignored `evidence/improvement/`; it includes rendered screenshots, test reports, the demo and primary score material. Private reference photos are kept outside the project. They must not be published.

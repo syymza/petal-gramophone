@@ -1,4 +1,5 @@
-import {PITCHES,CONTACT,TAU} from './music.js';
+import {BARREL,PIN_LENGTH,PIN_CENTER,PIN_TIP,TOOTH_THICKNESS,CONTACT_Y,CONTACT_Z,PITCH_X,pinRadius} from './mechanism.js?v=petal-03';
+import {PITCHES,CONTACT,TAU} from './music.js?v=petal-03';
 import * as T from './vendor/three.module.min.js';
 import {RoomEnvironment} from './vendor/RoomEnvironment.js';
 const canvas=document.getElementById('view');
@@ -65,16 +66,16 @@ for(let k=0;k<petals;k++){const pts=[];for(let i=0;i<=50;i++)pts.push(surface(.0
 const mechanism=new T.Group();drawer.add(mechanism);box(3.75,.12,2.13,0,.77,-.05,brassDark,mechanism);box(3.55,.035,1.94,0,.85,-.05,brass,mechanism);
 const rotor=new T.Group();rotor.position.set(-.12,1.25,.43);mechanism.add(rotor);const barrel=cyl(.38,2.98,0,0,0,brassLight,rotor,'x',64);cyl(.048,3.6,-.12,1.25,.43,steel,mechanism,'x');
 for(const x of [-1.73,1.5]){box(.2,.38,.26,x,1.06,.43,brassDark,mechanism);cyl(.15,.2,x,1.25,.43,brass,mechanism,'x');for(const z of [.2,.65])screw(x,.88,z,mechanism);}
-const PITCH_X=PITCHES.map((_,i)=>-1.5+i*2.9/(PITCHES.length-1)),EDIT_ANGLE=.78;
-const pins=new T.InstancedMesh(new T.CylinderGeometry(.014,.014,.09,6),brass,512*PITCHES.length);pins.count=0;pins.castShadow=false;rotor.add(pins);
+const EDIT_ANGLE=.78;
+const pins=new T.InstancedMesh(new T.CylinderGeometry(1,1,PIN_LENGTH,8),steel,512*PITCHES.length);pins.count=0;pins.castShadow=false;rotor.add(pins);
 const temp=new T.Object3D(),radial=new T.Vector3(),axisY=new T.Vector3(0,1,0);let currentNotes=[];
-function setNotes(notes,total=64){steps=total;currentNotes=notes.map(n=>({...n}));pins.count=notes.length;notes.forEach((n,i)=>{const a=CONTACT+n.t*TAU/steps;radial.set(0,Math.cos(a),Math.sin(a));temp.position.set(PITCH_X[n.r]+.12,radial.y*.418,radial.z*.418);temp.quaternion.setFromUnitVectors(axisY,radial);temp.scale.set(1,1,1);temp.updateMatrix();pins.setMatrixAt(i,temp.matrix);});pins.instanceMatrix.needsUpdate=true;pins.computeBoundingSphere();}
+function setNotes(notes,total=64){steps=total;currentNotes=notes.map(n=>({...n}));pins.count=notes.length;notes.forEach((n,i)=>{const a=CONTACT+n.t*TAU/steps;radial.set(0,Math.cos(a),Math.sin(a));temp.position.set(PITCH_X[n.r]+.12,radial.y*PIN_CENTER,radial.z*PIN_CENTER);temp.quaternion.setFromUnitVectors(axisY,radial);temp.scale.set(pinRadius(steps),1,pinRadius(steps));temp.updateMatrix();pins.setMatrixAt(i,temp.matrix);});pins.instanceMatrix.needsUpdate=true;pins.computeBoundingSphere();}
 const guide=new T.Group();mechanism.add(guide);guide.visible=false;const socketMat=new T.MeshStandardMaterial({color:'#71846d',roughness:.8,metalness:.1});
-const dot=mesh(new T.CircleGeometry(.036,20),socketMat,guide);dot.quaternion.setFromUnitVectors(new T.Vector3(0,0,1),new T.Vector3(0,Math.cos(EDIT_ANGLE),Math.sin(EDIT_ANGLE)));
-const prospect=mesh(new T.SphereGeometry(.043,12,8),new T.MeshStandardMaterial({color:'#d1ddab',roughness:.6,metalness:.25}),guide);prospect.visible=false;prospect.castShadow=false;
-function highlight(r){prospect.visible=r!==null&&editing;if(r!==null)prospect.position.set(PITCH_X[r],1.25+.43*Math.cos(EDIT_ANGLE),.43+.43*Math.sin(EDIT_ANGLE));}
+const dot=mesh(new T.CircleGeometry(.018,20),socketMat,guide);dot.quaternion.setFromUnitVectors(new T.Vector3(0,0,1),new T.Vector3(0,Math.cos(EDIT_ANGLE),Math.sin(EDIT_ANGLE)));
+const prospect=mesh(new T.RingGeometry(.018,.026,24),new T.MeshStandardMaterial({color:'#d1ddab',roughness:.6,metalness:.25}),guide);prospect.visible=false;prospect.castShadow=false;prospect.quaternion.copy(dot.quaternion);
+function highlight(r){prospect.visible=r!==null&&editing;if(r!==null)prospect.position.set(PITCH_X[r],BARREL.y+(BARREL.radius+.006)*Math.cos(EDIT_ANGLE),BARREL.z+(BARREL.radius+.006)*Math.sin(EDIT_ANGLE));}
 const teethMeshes=[];
-box(3.05,.13,.32,-.12,1.58,-.7,steel,mechanism);for(let i=0;i<PITCHES.length;i++){const len=.99-i*.009,tooth=box(.058,.026,len,PITCH_X[i],1.56,.085-len/2,steel,mechanism);tooth.rotation.x=-.018;teethMeshes.push(tooth);}
+box(3.05,.13,.32,-.12,1.58,-.7,steel,mechanism);for(let i=0;i<PITCHES.length;i++){const len=.99-i*.009,tooth=box(.058,TOOTH_THICKNESS,len,PITCH_X[i],CONTACT_Y+TOOTH_THICKNESS/2,CONTACT_Z-len/2,steel,mechanism);tooth.userData.length=len;teethMeshes.push(tooth);}
 for(const x of [-1.35,1.12])screw(x,1.66,-.72,mechanism);
 function gear(x,y,z,r,teeth){const shape=new T.Shape();for(let i=0;i<teeth*4;i++){const a=i/(teeth*4)*Math.PI*2,rad=r*(i%4===1||i%4===2?1:.87);if(!i)shape.moveTo(Math.cos(a)*rad,Math.sin(a)*rad);else shape.lineTo(Math.cos(a)*rad,Math.sin(a)*rad);}shape.closePath();const hole=new T.Path();hole.absarc(0,0,r*.22,0,Math.PI*2,true);shape.holes.push(hole);const geo=new T.ExtrudeGeometry(shape,{depth:.06,bevelEnabled:true,bevelSize:.008,bevelThickness:.008,bevelSegments:1,steps:1});const m=mesh(geo,brass,mechanism);m.rotation.y=Math.PI/2;m.position.set(x,y,z);return m;}
 const gears=[gear(1.68,1.25,.43,.43,22),gear(1.75,.98,-.19,.26,15)];cyl(.11,.14,1.77,1.25,.43,steel,mechanism,'x');
@@ -94,7 +95,7 @@ function setOpen(value,compose=false){opened=value;editing=compose;drawer.positi
 function setEditStep(value,r=selectedPitch){selectedPitch=r;editStep=((value%steps)+steps)%steps;rotor.rotation.x=EDIT_ANGLE-CONTACT-editStep*TAU/steps;phase=editStep;dot.position.set(PITCH_X[r],1.25+.384*Math.cos(EDIT_ANGLE),.43+.384*Math.sin(EDIT_ANGLE));highlight(r);}
 function setPhase(value){phase=value;rotor.rotation.x=-value*TAU/steps;gears.forEach((g,i)=>{gearQ.setFromAxisAngle(worldX,-value*TAU/steps*(i?-1.65:1));g.quaternion.copy(baseGearQ).premultiply(gearQ);});}
 function strike(notes,when){for(const n of notes)plucks[n.r]=when;}
-function animate(now,stamp){for(let r=0;r<PITCHES.length;r++){const dt=now-plucks[r],tooth=teethMeshes[r];tooth.rotation.x=-.018+(dt>=0&&dt<.32?.06*Math.sin(dt*135)*Math.exp(-dt*16):0);}const t=(stamp-windStart)/650;crankPivot.rotation.x=t>=0&&t<1?-TAU*(1-(1-t)**3):0;return t>=0&&t<1;}
+function animate(now,stamp){for(let r=0;r<PITCHES.length;r++){const dt=now-plucks[r],tooth=teethMeshes[r];tooth.rotation.x=dt>=0&&dt<.32?-.035*Math.sin(dt*135)*Math.exp(-dt*16):0;}const t=(stamp-windStart)/650;crankPivot.rotation.x=t>=0&&t<1?-TAU*(1-(1-t)**3):0;return t>=0&&t<1;}
 function wind(){windStart=performance.now();}
 function onBarrel(x,y){if(!editing)return false;const rect=canvas.getBoundingClientRect();mouse.set((x-rect.left)/rect.width*2-1,-(y-rect.top)/rect.height*2+1);raycaster.setFromCamera(mouse,camera);return raycaster.intersectObject(barrel).length>0;}
 function project(point){const rect=canvas.getBoundingClientRect(),p=new T.Vector3(...point).project(camera);return {x:rect.left+(p.x+1)/2*rect.width,y:rect.top+(1-p.y)/2*rect.height,visible:p.z<1};}
@@ -102,6 +103,6 @@ function dialPoint(){return project([-1.48,1.81,1.91]);}
 function setFlat(value){flat=value;layout();}
 function gripPoint(){root.updateMatrixWorld(true);const p=grip.getWorldPosition(new T.Vector3());return project(p.toArray());}
 function editPoint(r){return project([PITCH_X[r],1.25+.39*Math.cos(EDIT_ANGLE),.43+drawer.position.z+.39*Math.sin(EDIT_ANGLE)]);}
-function contactProbe(step,r,value){const before=rotor.rotation.x;setPhase(value);root.updateMatrixWorld(true);const index=currentNotes.findIndex(n=>n.t===step&&n.r===r);if(index<0){rotor.rotation.x=before;return null;}const m=new T.Matrix4();pins.getMatrixAt(index,m);const tip=new T.Vector3(0,.045,0).applyMatrix4(m);rotor.localToWorld(tip);const tooth=mechanism.localToWorld(new T.Vector3(PITCH_X[r],1.56,.085));rotor.rotation.x=before;return {distance:tip.distanceTo(tooth),tip:tip.toArray(),tooth:tooth.toArray()};}
-export const view={contactProbe,setOpen,setNotes,setPhase,setEditStep,highlight,strike,animate,wind,layout,render,onBarrel,project,gripPoint,editPoint,dialPoint,setFlat,canvas,info:()=>({opened,editing,phase,editStep,steps,flat,notes:currentNotes.map(n=>({...n})),rotation:rotor.rotation.x,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,geometries:renderer.info.memory.geometries,contact:CONTACT,pitches:PITCH_X.slice()}),ready:true};
+function contactProbe(step,r,value){const before=rotor.rotation.x,beforePhase=phase,toothMesh=teethMeshes[r],toothRotation=toothMesh.rotation.x;setPhase(value);toothMesh.rotation.x=0;root.updateMatrixWorld(true);const index=currentNotes.findIndex(n=>n.t===step&&n.r===r);if(index<0){rotor.rotation.x=before;phase=beforePhase;toothMesh.rotation.x=toothRotation;return null;}const matrix=new T.Matrix4();pins.getMatrixAt(index,matrix);const tip=new T.Vector3(0,PIN_LENGTH/2,0).applyMatrix4(matrix);rotor.localToWorld(tip);const tooth=new T.Vector3(0,-TOOTH_THICKNESS/2,toothMesh.userData.length/2);toothMesh.localToWorld(tooth);rotor.rotation.x=before;phase=beforePhase;toothMesh.rotation.x=toothRotation;return {distance:tip.distanceTo(tooth),tip:tip.toArray(),tooth:tooth.toArray(),surface:'actual front underside edge of tooth mesh'};}
+export const view={contactProbe,setOpen,setNotes,setPhase,setEditStep,highlight,strike,animate,wind,layout,render,onBarrel,project,gripPoint,editPoint,dialPoint,setFlat,canvas,info:()=>({opened,editing,phase,editStep,steps,flat,notes:currentNotes.map(n=>({...n})),rotation:rotor.rotation.x,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,geometries:renderer.info.memory.geometries,contact:CONTACT,teeth:teethMeshes.length,pinCount:pins.count,pinRadius:pinRadius(steps),pinLength:PIN_LENGTH,pinProjection:PIN_TIP-BARREL.radius,barrel:BARREL,pitches:PITCH_X.slice()}),ready:true};
 setOpen(false);

@@ -1,7 +1,7 @@
-import {TUNES,NAMES,PITCHES,DEFAULT_NOTES,sanitizePattern,clone,CylinderTransport,CONTACT,TAU} from './music.js';
-import {MusicBoxAudio} from './audio.js';
+import {TUNES,NAMES,PITCHES,DEFAULT_NOTES,sanitizePattern,clone,CylinderTransport,CONTACT,TAU} from './music.js?v=petal-03';
+import {MusicBoxAudio} from './audio.js?v=petal-03';
 const $=id=>document.getElementById(id),audio=new MusicBoxAudio();
-let view;try{({view}=await import('./instrument.js'));}catch(error){$('loading').hidden=true;$('fallback').hidden=false;throw error;}
+let view;try{({view}=await import('./instrument.js?v=petal-03'));}catch(error){$('loading').hidden=true;$('fallback').hidden=false;throw error;}
 let selected=0,custom={steps:64,bpm:92,notes:DEFAULT_NOTES.map(n=>({...n}))},editing=false,flat=false,opened=false,editStep=0,pitch=12,bank=12,erase=false,undo=[],intent=0,previewGeneration=0,saveFailed=false,raf=0,force=true,lastDraw=0,drag=null,pendingCopy=null,editPositioned=false,noticeTimer,gridRevision=0,gridStamp="",timelineDrag=null,blockTimelineClick=0,lastMarked=-1,overviewStamp='';const overviewBackground=document.createElement('canvas');
 const packets=[],scheduled=[],observed=[];
 try{const raw=localStorage.getItem('petal.cylinder.v2');if(raw!==null)custom=sanitizePattern(JSON.parse(raw));else{const old=localStorage.getItem('petal.cylinder.v1');if(old!==null){const notes=JSON.parse(old),legacy=[60,62,64,67,69,72];custom={steps:16,bpm:92,notes:Array.isArray(notes)?notes.filter(n=>Number.isInteger(n?.t)&&n.t>=0&&n.t<16&&Number.isInteger(n.r)&&n.r>=0&&n.r<6).map(n=>({t:n.t,r:legacy[n.r]-48})):[]};}}const index=Number(localStorage.getItem('petal.cylinder.tune'));if(Number.isInteger(index)&&index>=0&&index<10)selected=index;}catch{saveFailed=true;}

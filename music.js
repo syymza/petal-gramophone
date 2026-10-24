@@ -1,4 +1,4 @@
-export const PITCHES=Array.from({length:37},(_,i)=>48+i);
+export const PITCHES=Array.from({length:37},(_,i)=>60+i);
 const spell=['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'];
 export const NAMES=PITCHES.map(n=>spell[n%12]+(Math.floor(n/12)-1));
 export const STEPS=64,CONTACT=-.84,TAU=Math.PI*2;

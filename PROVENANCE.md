@@ -17,3 +17,5 @@ The nine melodies below are public-domain compositions. These are newly entered,
 | Silent Night | F.X.Gruber (1787–1863),1818. [Mutopia1295](https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=1295), familiar hymn melody, explicitly Public Domain; original1818 melody also checked at [Mutopia81](https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=81). | One familiar full verse in C; slow triple-time setting. |
 
 Verification retained locally: source notation for Beethoven/Brahms/Greensleeves/Gruber, primary publication metadata, separate opening-contour fixtures, chromatic-note checks, phrase/cadence and duration checks, rendered audio level/finiteness tests and browser playback tests. Musical taste and iPhone speaker balance still need Dani’s listening feedback; automated checks cannot establish that an arrangement is pleasing.
+
+Pitch notation in the arrangement strings is transposed up one octave by the fixed lane mapping for the music-box register. Displayed C4–C7 names match the sounding MIDI pitches. Correcting earlier display labels did not change the synthesized frequencies or saved lane indices.

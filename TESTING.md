@@ -13,3 +13,9 @@ This revision is a local preview awaiting approval; it has not been pushed, merg
 Limits: no physical iPhone or silent-switch validation, no measured hardware dimensions, no complete accessibility audit. The pin rendering remains a readable, mechanically mapped illustration; custom notes on the back of the cylinder are naturally occluded, and an empty composition has no pins. Subjective musical balance still needs Dani's listening feedback.
 
 Private screenshots, user references and evidence stay outside public source or in ignored evidence/. Never publish them.
+
+## Focused rendered-contact audit
+
+The follow-up audit uses test-only instrumentation around the actual WebGL render and actual Oscillator starts. It reads instance matrices and geometry bounds directly, finds cap positions and tooth underside edges in world/screen coordinates, and records normal-speed frames. It does not call contactProbe or infer contacts from shared timing arrays. Isolated single-pin and repeated-pitch patterns compare the exact normal listening view before/after; separate labelled overlays mark real cap/edge positions. A separate full Frère Jacques revolution matches the delivered demo view. Post-graph waveform onset is measured independently with OfflineAudioContext; raw Oscillator timestamps are not presented as measured speaker onset.
+
+State checks inspect actual tooth transforms/materials after every preset switch and pause, and verify a pitch audition without a new pin causes no mechanical pluck. The pin mesh count is checked separately from tooth count. Private raw recordings and reports stay outside public source.

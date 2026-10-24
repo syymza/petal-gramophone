@@ -23,3 +23,15 @@ Tooth lengths are visually graduated; sound is synthesized from the lane’s MID
 ## Manufacturer references
 
 [Reuge’s manufacturing account](https://www.reuge.com/en/factory/nos-savoirs-faire/mouvements-a-musique-mecanique) describes fine steel-wire pins in brass cylinders, precision comb alignment, custom comb cutting and individual tooth tuning. It lists common36/72/144-tooth movements. [Nidec’s cylinder music-box line](https://www.nidec.com/en/products/other-products/music-boxes/cylinder-music-box/) lists30/50/72/100-note movements. These support the mechanism principle and show that tooth count varies; they do not validate this model’s exact dimensions or its37-tooth choice.
+
+## What the full cylinder shows
+
+The normal-view demonstration uses Frère Jacques:32 unique note events on seven pitches, no simultaneous notes, and one19.615-second revolution. Its32 pins are the entire tune, not32 notes sounding together. Repeated pitches reuse their tooth but have separate angular pins. Counts by sounding pitch are C5:10, D5:2, E5:6, F5:4, G5:6, A5:2 and G4:2. Future and past events remain visible around the barrel; the back half is naturally occluded. One instanced pin mesh is reused on tune changes, with its active count replaced; unused capacity is not drawn. There are no decorative cylinder pins.
+
+## Release and animation limits
+
+The event convention is the pin-cap centre passing the tooth's front underside edge: a release/pluck point, not a simulated first-contact force. The tooth now pivots at its fixed back root; the mounting bar covers all root positions. A small22-hundredths-second settling motion follows a played release. There is no gold tooth glow. Auditioning a pitch without rotating its physical pin plays sound only, and pause/tune replacement clear all tooth settling state. The earlier colour hold and centre-pivot motion were misleading visual cues.
+
+This is not a rigid-body contact or elastic-beam simulation: preload, finite head/edge contact, stiffness, damping and actual tooth vibration frequencies are not solved. At normal phone size the cap can be partly hidden by the tooth edge. Diagnostic overlays identify real transformed geometry and are test-only, not extra pins or product highlights.
+
+Visual phase follows the browser's estimated audio output presentation time when available, with a latency-based fallback. That estimate does not measure a phone speaker. The synthesized filter/compressor/envelope graph adds about8.7–8.9ms to a test note's first measurable waveform at44.1/48kHz in local Chrome; display scanout and hardware output remain unmeasured. No hardware-exact audiovisual timing is claimed.

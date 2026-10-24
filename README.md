@@ -1,37 +1,27 @@
-# Petal
+# Petal — mechanical music box
 
-A small browser-only gramophone music box. A pinned brass cylinder plucks a steel comb: nine original miniatures, plus a short melody of your own.
+A static, browser-only gramophone music box. The musical mechanism is a pinned brass cylinder and a steel comb inside the cabinet. The decorative record is never an editor.
 
-Turn the side crank once to start. The needle plays and pauses. Open the cabinet to watch the mechanism; use the tune dial to select a miniature or **Yours**.
+[Play Petal](https://syymza.github.io/petal-gramophone/) in your browser. All synthesis, editing and saved notes stay on your device.
 
-In Yours, tap a cylinder socket to place or remove a pin. Drag the barrel, or use **Turn back / Turn next**, to reach another of its sixteen positions. Six pentatonic pitch tracks keep the loop musical. Erase, Undo, Clear and Play appear only while composing. Your melody saves in this browser, including an empty cylinder. Nothing is uploaded. Keyboard users can tab to six pitch buttons for the current position; Space toggles playback outside focused controls.
+## Playing
 
-## Run locally
+Select one of nine familiar classics from the dial on the fixed front cabinet rail. The tune name is readable below the object. Wind & play adds90 seconds to an empty spring; further winding adds60 seconds, up to180. The spring holds speed then gradually slows over its final20 seconds. An empty spring requires winding; the Play/Pause control appears once wound. Pause preserves its remaining energy and musical position. Open box reveals the turning mechanism without changing tunes.
 
-Serve the repository root over HTTP:
+## Composing
 
-```sh
-npm start
-```
+Yours opens the cylinder editor. Pick a chromatic pitch C4–C7, tap the lit socket to toggle a pin and hear it immediately, and drag vertically to turn the barrel without adding notes. Back/Next move one position in the barrel view. Unwrap pins temporarily shows that same pattern as labelled pitch rows and time columns. Higher/Lower change the pitch bank. Swipe or drag the continuous strip horizontally; use the whole-melody overview to jump directly anywhere, with elapsed/total time and a visible playhead. The amber column maps to the current barrel position. Accidentals are spelled out, such as G sharp 5. Wrap onto barrel returns to the same position. One Play/Pause button previews the composition and winds an empty spring when needed. All phone grid cells are44px high; fewer pitch rows appear when browser bars reduce available height.
 
-Open `http://127.0.0.1:4189`. Production is static HTML, CSS and JavaScript with a bundled Three.js renderer. There is no build, backend, runtime AI, external asset request or package installation needed to play.
+Copy to Yours protects existing notes with a replacement dialog. Cancel leaves them intact; Undo restores the complete prior pattern, tempo and timing resolution after replacement. Undo also covers pin edits and Clear. Done returns to the whole instrument; Edit pins reopens it. Presets are immutable. Playback in the editor begins promptly at the current position; a pin sounds only when it reaches the comb.
 
-## Verification
+Compositions and selected tune are saved only in this browser’s localStorage. The earlier six-pitch format migrates without altering its timing or pitch. Empty patterns remain empty. Storage failure is visible. No data leaves the device.
 
-```sh
-npm test
-node tests/release.mjs
-```
+## Local development and verification
 
-Optional browser checks require Playwright and an installed Chrome browser. `PLAYWRIGHT_PATH` can select an existing Playwright module. `PETAL_URL` selects a served local or published URL. WebKit checks also accept `WEBKIT_PATH`.
+Serve this directory with any static HTTP server. All runtime assets are relative and bundled, compatible with GitHub Pages. No build, installation, API key or paid service is required.
 
-```sh
-node tests/browser.cjs
-node tests/webkit.cjs
-```
+`npm test` checks source melody contours, chromatic notes, variable lengths, cadence/duration, capacity, contact angles and exact spring timing. Browser and WebKit tests require an existing Playwright installation via PLAYWRIGHT_PATH and optional WEBKIT_PATH. Source/license/privacy checks remain in tests/release.mjs. See PROVENANCE.md for tune sources.
 
-The cylinder and its pins rotate from the audio clock. Scheduled notes coincide with the physical pin contact angle; the steel teeth flex at plucks. One guarded scheduler handles timing, fractional pause/resume, switching and interruptions. Sound requires an explicit gesture. Where available, the browser's Audio Session is set to playback; physical iPhone silent-switch and route behavior still require device testing.
+Audio starts only after a gesture. The playback audio-session route is requested when available, following the previously verified Orbit approach. Chromium/WebKit phone emulation is not a physical iPhone test. Silent switch, real Safari browser chrome, interruptions, low-power hardware and subjective musical balance still need on-device/user validation.
 
-Custom data stays in localStorage and is browser/device-specific. The loop has six pitches and sixteen positions. A hidden tab or interrupted audio session pauses the mechanism and requires an explicit resume. Low-power-device rendering performance and subjective listening have not been formally validated.
-
-See [music and asset provenance](PROVENANCE.md) for the original arrangements and bundled renderer license.
+The visible mechanism is a physically inspired browser model, not a dimensioned replica. MECHANISM.md documents tooth counts, all-note pin mapping, clearances and the remaining hardware abstractions. All37 sounding pitches retain their previous frequencies; the octave labels now match them.

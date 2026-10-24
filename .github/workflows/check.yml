@@ -1,0 +1,24 @@
+name: Validate static instrument
+on:
+  pull_request:
+  push:
+    branches: [main, feat/pages-release]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Syntax, music timing and release hygiene
+        run: |
+          node --version
+          node --check app.js
+          node --check audio.js
+          node --check instrument.js
+          node --check music.js
+          npm test
+          node tests/release.mjs

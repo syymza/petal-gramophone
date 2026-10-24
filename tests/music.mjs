@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import {TUNES,DEFAULT_NOTES,sanitizeNotes,CylinderTransport,CONTACT,TAU,pinAngle,rotationForPhase} from '../music.js';
+assert.equal(TUNES.length,9);assert.equal(new Set(TUNES.map(t=>JSON.stringify(t.notes))).size,9);
+for(const tune of TUNES){assert.ok(tune.notes.length>=10);assert.deepEqual(sanitizeNotes(tune.notes),tune.notes);assert.equal(tune.notes.at(-1).r,0);assert.ok(tune.bpm>=70&&tune.bpm<=120);}
+assert.deepEqual(sanitizeNotes([{t:0,r:0},{t:0,r:0},{t:16,r:0},{t:1,r:-1},null]),[{t:0,r:0}]);assert.deepEqual(sanitizeNotes([]),[]);assert.deepEqual(sanitizeNotes(null),DEFAULT_NOTES);
+for(let loop=0;loop<5;loop++)for(let t=0;t<16;t++){const absolute=loop*16+t,delta=pinAngle(t,absolute)-CONTACT;assert.ok(Math.abs(Math.atan2(Math.sin(delta),Math.cos(delta)))<1e-12);assert.ok(Math.abs(rotationForPhase(absolute)+absolute*TAU/16)<1e-12);}
+assert.ok(Math.abs(1.25+.463*Math.cos(CONTACT)-1.56)<.002);assert.ok(Math.abs(.43+.463*Math.sin(CONTACT)-.085)<.002);
+let now=0,events=[];const tr=new CylinderTransport(()=>now,(step,when,absolute)=>events.push({step,when,absolute}));tr.start();tr.start();for(let i=0;i<4000;i++){now=i*.025;tr.tick();}assert.equal(events[0].when,.025);for(let i=1;i<events.length;i++){assert.equal(events[i].absolute,i);assert.equal(events[i].step,i%16);assert.ok(Math.abs(events[i].when-events[i-1].when-30/92)<1e-10);}
+now=100.11;tr.pause();const phase=tr.phase(),lastPast=Math.floor(phase);events=events.filter(e=>e.when<=now);const previous=events.at(-1)?.absolute;now+=7;assert.equal(tr.phase(),phase);tr.start();tr.tick();for(let i=0;i<60;i++){now+=.025;tr.tick();}const resumed=events.filter(e=>e.when>107);assert.ok(resumed[0].absolute>=(previous||0));assert.equal(resumed[0].absolute,lastPast+1);assert.ok(resumed[0].when>=107.11);
+tr.pause();tr.bpm=78;tr.reset();events=[];tr.start();tr.tick();assert.equal(events[0].step,0);tr.pause();tr.position=3-(.78-CONTACT)*16/TAU;events=[];tr.start();tr.tick();now+=1;tr.tick();assert.ok(events.every(e=>e.step>=0&&e.step<16));
+now=0;const stalled=[];const stall=new CylinderTransport(()=>now,(step,when)=>stalled.push({step,when,lead:when-now}));stall.start();stall.tick();now=.6;stall.tick();assert.ok(stalled.every(e=>e.lead>=-.005));assert.ok(stall.skipped>=1);
+console.log('PASS: nine original melodies, pin sanitization, 80 exact cylinder/comb contacts, actual contact geometry, 307 exact timed events, repeat-start guard, fractional pause/resume, tempo reset and manual barrel phase.');

@@ -23,18 +23,12 @@ export function sanitizeNotes(value,steps=STEPS){if(!Array.isArray(value))return
 export function sanitizePattern(value){const steps=Number.isInteger(value?.steps)&&value.steps>=16&&value.steps<=512?value.steps:STEPS;return {steps,ticksPerBeat:value?.ticksPerBeat===4?4:2,bpm:Number.isFinite(value?.bpm)?Math.max(50,Math.min(140,value.bpm)):92,notes:sanitizeNotes(value?.notes,steps)};}
 export const rotationForPhase=(phase,steps=STEPS)=>-phase*TAU/steps;
 export const pinAngle=(step,phase,steps=STEPS)=>CONTACT+(step-phase)*TAU/steps;
-// Exact integral of a spring that holds speed, then gently slows for its last 20 seconds.
-const travel=e=>e>20?e-20+40/3:2*Math.pow(Math.max(0,e),1.5)/(3*Math.sqrt(20));
-const untravel=d=>d>40/3?d-40/3+20:Math.pow(Math.max(0,d)*3*Math.sqrt(20)/2,2/3);
 export class CylinderTransport{
- constructor(clock,onStep){this.clock=clock;this.onStep=onStep;this.bpm=92;this.ticksPerBeat=2;this.steps=STEPS;this.running=false;this.count=0;this.skipped=0;this.energy=0;this.position=-.025*this.bpm*this.ticksPerBeat/60;this.originTime=0;this.originPhase=this.position;this.nextIndex=0;}
- remaining(at=this.clock()){return this.running?Math.max(0,this.energy-(at-this.originTime)):this.energy;}
- speed(){return Math.min(1,Math.sqrt(this.remaining()/20));}
- phase(at=this.clock()){return this.running?this.originPhase+(travel(this.energy)-travel(this.remaining(at)))*this.bpm*this.ticksPerBeat/60:this.position;}
- timeAt(index){const left=travel(this.energy)-(index-this.originPhase)*60/(this.bpm*this.ticksPerBeat);return left<0?Infinity:this.originTime+this.energy-untravel(left);}
- start(){if(this.running||this.energy<=0)return;this.originPhase=this.position;this.originTime=this.clock();this.nextIndex=Math.ceil(this.position+1e-8);this.running=true;}
- pause(){if(!this.running)return;this.position=this.phase();this.energy=this.remaining();this.running=false;}
- wind(seconds=60){const was=this.running;this.pause();this.energy=Math.min(180,this.energy+seconds);if(was)this.start();}
+ constructor(clock,onStep){this.clock=clock;this.onStep=onStep;this.bpm=92;this.ticksPerBeat=2;this.steps=STEPS;this.running=false;this.count=0;this.skipped=0;this.position=-.025*this.bpm*this.ticksPerBeat/60;this.originTime=0;this.originPhase=this.position;this.nextIndex=0;}
+ phase(at=this.clock()){return this.running?this.originPhase+(at-this.originTime)*this.bpm*this.ticksPerBeat/60:this.position;}
+ timeAt(index){return this.originTime+(index-this.originPhase)*60/(this.bpm*this.ticksPerBeat);}
+ start(){if(this.running)return;this.originPhase=this.position;this.originTime=this.clock();this.nextIndex=Math.ceil(this.position+1e-8);this.running=true;}
+ pause(){if(!this.running)return;this.position=this.phase();this.running=false;}
  reset(step=0){this.position=step-.025*this.bpm*this.ticksPerBeat/60;this.originPhase=this.position;this.originTime=this.clock();this.nextIndex=step;this.count=0;this.skipped=0;}
- tick(){if(!this.running)return;const now=this.clock(),phase=this.phase();let when=this.timeAt(this.nextIndex);if(when<now-.005){const target=Math.ceil(phase);this.skipped+=Math.max(0,target-this.nextIndex);this.nextIndex=target;when=this.timeAt(this.nextIndex);}while(when<now+.12){const absolute=this.nextIndex;this.onStep(((absolute%this.steps)+this.steps)%this.steps,when,absolute);this.nextIndex++;this.count++;when=this.timeAt(this.nextIndex);}if(this.remaining()===0)this.pause();}
+ tick(){if(!this.running)return;const now=this.clock(),phase=this.phase();let when=this.timeAt(this.nextIndex);if(when<now-.005){const target=Math.ceil(phase);this.skipped+=Math.max(0,target-this.nextIndex);this.nextIndex=target;when=this.timeAt(this.nextIndex);}while(when<now+.12){const absolute=this.nextIndex;this.onStep(((absolute%this.steps)+this.steps)%this.steps,when,absolute);this.nextIndex++;this.count++;when=this.timeAt(this.nextIndex);}}
 }

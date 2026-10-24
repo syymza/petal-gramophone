@@ -1,4 +1,4 @@
-import {PITCHES} from './music.js?v=petal-03';
+import {PITCHES} from './music.js?v=petal-04';
 export class MusicBoxAudio{
  constructor(){this.context=null;this.voices=new Set();this.route='default';this.notesPlayed=0;this.dropped=0;}
  async unlock(){try{if(!this.context){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)throw Error('Audio unavailable');this.context=new AC({latencyHint:'interactive'});this.master=createOutput(this.context);}try{if(navigator.audioSession){navigator.audioSession.type='playback';this.route='playback';}}catch{}await this.context.resume();return this.context.state==='running';}catch{return false;}}

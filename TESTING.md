@@ -1,6 +1,6 @@
 # Local review verification
 
-This revision is a local preview awaiting approval; it has not been pushed, merged or deployed.
+This records verification of the cylinder-and-lever revision. The repository pull request and Pages deployment record identify its released commit.
 
 - Nine familiar arrangements and their provenance are unchanged. Independent opening fixtures, rhythm/range/cadence checks and all465 pin/contact mappings pass.
 - The lever replaces spring energy and all other visible playback controls. Steady-tempo scheduling was checked for five minutes, including repeated starts, fractional pause/resume without repeated audible events, and bounded stalled-scheduler skipping.
@@ -19,3 +19,5 @@ Private screenshots, user references and evidence stay outside public source or 
 The follow-up audit uses test-only instrumentation around the actual WebGL render and actual Oscillator starts. It reads instance matrices and geometry bounds directly, finds cap positions and tooth underside edges in world/screen coordinates, and records normal-speed frames. It does not call contactProbe or infer contacts from shared timing arrays. Isolated single-pin and repeated-pitch patterns compare the exact normal listening view before/after; separate labelled overlays mark real cap/edge positions. A separate full Frère Jacques revolution matches the delivered demo view. Post-graph waveform onset is measured independently with OfflineAudioContext; raw Oscillator timestamps are not presented as measured speaker onset.
 
 State checks inspect actual tooth transforms/materials after every preset switch and pause, and verify a pitch audition without a new pin causes no mechanical pluck. The pin mesh count is checked separately from tooth count. Private raw recordings and reports stay outside public source.
+
+The full normal-speed rendered audit covered all nine complete preset revolutions:465 source onsets matched465 distinct rendered pin instances across11,049 sampled frames. The nearest sampled cap/edge separation was at most0.196 CSS pixels in the phone view, with source/presentation-frame differences up to17.45ms. All tooth roots stayed fixed within numerical precision, and no gold frames remained. These are browser-rendered measurements with the physical and timing limits above, not measured speaker/display synchronization.
